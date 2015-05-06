@@ -78,7 +78,7 @@ Plugin 'rizzatti/funcoo.vim'
 Plugin 'rizzatti/dash.vim'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'mephux/vim-jsfmt'
-Plugin 'altercation/vim-colors-solarized'
+Plugin 'tomasr/molokai'
 
 call vundle#end()
 filetype plugin indent on
@@ -113,10 +113,8 @@ endif
 " }}}
 " Colors {{{
 set background=dark
-"set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
-if filereadable($HOME . '/.vim/bundle/vim-colors-solarized/colors/solarized.vim')
-  colorscheme solarized
-end
+set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
+colorscheme molokai
 highlight ExtraWhitespace ctermbg=darkred guibg=darkred
 match ExtraWhitespace /\s\+$/
 " }}}

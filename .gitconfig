@@ -16,3 +16,6 @@
         hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
         type = cat-file -t
         dump = cat-file -p
+[user]
+	name = Hendrik Roth
+	email = mail@henn1nk.com
