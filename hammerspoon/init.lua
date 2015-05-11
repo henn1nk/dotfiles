@@ -26,22 +26,19 @@ hotkey.bind(mash, '5', function() application.launchOrFocus('iTerm') end)
 
 -- Safari tab keys
 function safari_tab(num)
-        activeApp = hs.window.focusedWindow():application():title()
-
-        if activeApp == 'Safari' then
-                hs.applescript._applescript('tell front window of app "Safari" to set current tab to tab ' .. num)
-        end
+        hs.applescript._applescript('tell front window of app "Safari" to set current tab to tab ' .. num)
 end
 
-hs.hotkey.bind({"cmd"}, "1", function() safari_tab(1) end)
-hs.hotkey.bind({"cmd"}, "2", function() safari_tab(2) end)
-hs.hotkey.bind({"cmd"}, "3", function() safari_tab(3) end)
-hs.hotkey.bind({"cmd"}, "4", function() safari_tab(4) end)
-hs.hotkey.bind({"cmd"}, "5", function() safari_tab(5) end)
-hs.hotkey.bind({"cmd"}, "6", function() safari_tab(6) end)
-hs.hotkey.bind({"cmd"}, "7", function() safari_tab(7) end)
-hs.hotkey.bind({"cmd"}, "8", function() safari_tab(8) end)
-hs.hotkey.bind({"cmd"}, "9", function() safari_tab(9) end)
+safari_tab_keys = hs.hotkey.modal.new()
+safari_tab_keys:bind({"cmd"}, "1", function() safari_tab(1) end)
+safari_tab_keys:bind({"cmd"}, "2", function() safari_tab(2) end)
+safari_tab_keys:bind({"cmd"}, "3", function() safari_tab(3) end)
+safari_tab_keys:bind({"cmd"}, "4", function() safari_tab(4) end)
+safari_tab_keys:bind({"cmd"}, "5", function() safari_tab(5) end)
+safari_tab_keys:bind({"cmd"}, "6", function() safari_tab(6) end)
+safari_tab_keys:bind({"cmd"}, "7", function() safari_tab(7) end)
+safari_tab_keys:bind({"cmd"}, "8", function() safari_tab(8) end)
+safari_tab_keys:bind({"cmd"}, "9", function() safari_tab(9) end)
 
 -- automatic config reloading
 function reload_config(files)
@@ -50,3 +47,16 @@ end
 
 hs.pathwatcher.new(os.getenv("HOME") .. "/.hammerspoon/", reload_config):start()
 hs.alert.show("Config reloaded")
+
+-- application watcher
+function applicationWatcher(app, event, appObject)
+        if app == 'Safari' then
+                if event == hs.application.watcher.activated then
+                        safari_tab_keys:enter()
+                else
+                        safari_tab_keys:exit()
+                end
+        end
+end
+
+hs.application.watcher.new(applicationWatcher):start()
