@@ -29,23 +29,36 @@ function safari_tab(num)
         hs.applescript._applescript('tell front window of app "Safari" to set current tab to tab ' .. num)
 end
 
-safari_tab_keys = hs.hotkey.modal.new()
-safari_tab_keys:bind({"cmd"}, "1", function() safari_tab(1) end)
-safari_tab_keys:bind({"cmd"}, "2", function() safari_tab(2) end)
-safari_tab_keys:bind({"cmd"}, "3", function() safari_tab(3) end)
-safari_tab_keys:bind({"cmd"}, "4", function() safari_tab(4) end)
-safari_tab_keys:bind({"cmd"}, "5", function() safari_tab(5) end)
-safari_tab_keys:bind({"cmd"}, "6", function() safari_tab(6) end)
-safari_tab_keys:bind({"cmd"}, "7", function() safari_tab(7) end)
-safari_tab_keys:bind({"cmd"}, "8", function() safari_tab(8) end)
-safari_tab_keys:bind({"cmd"}, "9", function() safari_tab(9) end)
+safari_tab_keys = hotkey.modal.new()
+for i = 1, 9, 1 do
+        safari_tab_keys:bind(mash, tostring(i), function() safari_tab(i) end)
+end
+
+-- This draws a bright red circle around the pointer for a few seconds
+function mouse_highlight()
+        if mouseCircle then
+                mouseCircle:delete()
+                if mouseCircleTimer then
+                        mouseCircleTimer:stop()
+                end
+        end
+        mousepoint = hs.mouse.getAbsolutePosition()
+        mouseCircle = hs.drawing.circle(hs.geometry.rect(mousepoint.x-40, mousepoint.y-40, 80, 80))
+        mouseCircle:setStrokeColor({["red"]=1,["blue"]=0,["green"]=0,["alpha"]=1})
+        mouseCircle:setFill(false)
+        mouseCircle:setStrokeWidth(5)
+        mouseCircle:show()
+        mouseCircleTimer = hs.timer.doAfter(3, function() mouseCircle:delete() end)
+end
+
+hotkey.bind({"cmd", "alt"}, 'd', mouse_highlight)
 
 -- automatic config reloading
 function reload_config(files)
         hs.reload()
 end
 
-hs.pathwatcher.new(os.getenv("HOME") .. "/.hammerspoon/", reload_config):start()
+hs.pathwatcher.new(os.getenv("HOME") .. "/git/dotfiles/hammerspoon/", reload_config):start()
 hs.alert.show("Config reloaded")
 
 -- application watcher
